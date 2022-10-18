@@ -50,6 +50,7 @@ const results = computed(() => {
 </script>
 <template>
   <div class="flex flex-col py-5">
+    <!-- Input field -->
     <input
       class="mb-7 h-10"
       type="text"
@@ -58,6 +59,8 @@ const results = computed(() => {
       id=""
       v-model="search"
     />
+
+    <!-- Region dropdown -->
     <select
       class="flex justify-items-start w-52 py-3 pl-5"
       name=""
@@ -65,7 +68,7 @@ const results = computed(() => {
       placeholder="Filter by Region"
       v-model="area"
     >
-      <option class="" value="" disabled selected>Filter by Region</option>
+      <option class="" value="">Filter by Region</option>
       <option :value="region" v-for="region in regions">
         {{ region }}
       </option>
