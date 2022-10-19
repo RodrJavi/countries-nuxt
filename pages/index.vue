@@ -14,28 +14,21 @@ const regions = computed(() => {
 });
 
 const filteredCountries = computed(() => {
-  let filtered = [];
-  for (let i = 0; i < countries.value.length; i++) {
-    const region = countries.value[i].region;
-    if (region == area.value) {
-      filtered.push(countries.value[i]);
-    }
-  }
-  return filtered;
+  return countries.value.filter((country) =>
+    country.region.toLowerCase().includes(area.value.toLowerCase())
+  );
 });
 
 const searched = computed(() => {
-  // let names = [];
-  // for (let i = 0; i < countries.value.length; i++) {
-  //   const name = countries.value[i].name;
-  //   if (name.toLowerCase().includes(search.value.toLowerCase())) {
-  //     names.push(countries.value[i]);
-  //   }
-  // }
-  // return names;
-  return countries.value.filter((country) =>
-    country.name.toLowerCase().includes(search.value.toLowerCase())
-  );
+  if (area.value == "") {
+    return countries.value.filter((country) =>
+      country.name.toLowerCase().includes(search.value.toLowerCase())
+    );
+  } else {
+    return filteredCountries.value.filter((country) =>
+      country.name.toLowerCase().includes(search.value.toLowerCase())
+    );
+  }
 });
 
 const results = computed(() => {
@@ -76,9 +69,10 @@ const results = computed(() => {
     <!-- <pre>{{ { area, regions, filteredCountries } }}</pre> -->
     <!-- <pre>{{ results }}</pre> -->
     <div v-if="!results">
-      <div
+      <NuxtLink
         v-for="country in countries"
         class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden"
+        :to="country.name"
       >
         <img :src="country.flags.svg" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col">
@@ -95,7 +89,7 @@ const results = computed(() => {
             {{ country.capital }}
           </span>
         </div>
-      </div>
+      </NuxtLink>
     </div>
     <div v-else>
       <div
