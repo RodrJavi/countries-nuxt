@@ -40,12 +40,14 @@ const results = computed(() => {
     return false;
   }
 });
+
+const numberFormatter = Intl.NumberFormat("en-US");
 </script>
 <template>
   <div class="flex flex-col py-5">
     <!-- Input field -->
     <input
-      class="mb-7 h-10"
+      class="mb-7 h-10 dark:bg-dblue"
       type="text"
       placeholder="Search for a country..."
       name=""
@@ -55,7 +57,7 @@ const results = computed(() => {
 
     <!-- Region dropdown -->
     <select
-      class="flex justify-items-start w-52 py-3 pl-5"
+      class="flex justify-items-start w-52 py-3 pl-5 dark:bg-dblue"
       name=""
       id=""
       placeholder="Filter by Region"
@@ -71,15 +73,17 @@ const results = computed(() => {
     <div v-if="!results">
       <NuxtLink
         v-for="country in countries"
-        class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden"
+        class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden dark:bg-dblue"
         :to="country.alpha3Code"
       >
         <img :src="country.flags.svg" alt="" />
-        <div class="px-5 pb-10 pt-3 flex flex-col">
-          <h2 class="font-extrabold my-3">{{ country.name }}</h2>
+        <div class="px-5 pb-10 pt-3 flex flex-col dark:bg-dblue">
+          <h2 class="font-extrabold my-3">
+            {{ country.name }}
+          </h2>
           <span class="">
             <span class="font-semibold">Population:</span>
-            {{ country.population }}
+            {{ numberFormatter.format(country.population) }}
           </span>
           <span>
             <span class="font-semibold">Region:</span> {{ country.region }}
@@ -94,15 +98,15 @@ const results = computed(() => {
     <div v-else>
       <NuxtLink
         v-for="country in results.value"
-        class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden"
+        class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden dark:bg-dblue"
         :to="country.alpha3Code"
       >
         <img :src="country.flags.svg" alt="" />
-        <div class="px-5 pb-10 pt-3 flex flex-col">
+        <div class="px-5 pb-10 pt-3 flex flex-col dark:bg-dblue">
           <h2 class="font-extrabold my-3">{{ country.name }}</h2>
           <span class="">
             <span class="font-semibold">Population:</span>
-            {{ country.population }}
+            {{ numberFormatter.format(country.population) }}
           </span>
           <span>
             <span class="font-semibold">Region:</span> {{ country.region }}
