@@ -72,7 +72,7 @@ const results = computed(() => {
       <NuxtLink
         v-for="country in countries"
         class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden"
-        :to="country.name"
+        :to="country.alpha3Code"
       >
         <img :src="country.flags.svg" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col">
@@ -92,9 +92,10 @@ const results = computed(() => {
       </NuxtLink>
     </div>
     <div v-else>
-      <div
+      <NuxtLink
         v-for="country in results.value"
         class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden"
+        :to="country.alpha3Code"
       >
         <img :src="country.flags.svg" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col">
@@ -111,7 +112,7 @@ const results = computed(() => {
             {{ country.capital }}
           </span>
         </div>
-      </div>
+      </NuxtLink>
     </div>
   </div>
 </template>
