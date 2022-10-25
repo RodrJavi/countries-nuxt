@@ -4,7 +4,8 @@ module.exports = {
   content: [],
   theme: {
     screens: {
-      md: "376px",
+      md: "500px",
+      lg: "870px",
     },
 
     fontSize: {

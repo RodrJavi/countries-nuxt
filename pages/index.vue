@@ -46,37 +46,40 @@ const numberFormatter = Intl.NumberFormat("en-US");
 <template>
   <div class="flex flex-col py-5">
     <!-- Input field -->
-    <input
-      class="mb-7 h-10 dark:bg-dblue"
-      type="text"
-      placeholder="Search for a country..."
-      name=""
-      id=""
-      v-model="search"
-    />
-
-    <!-- Region dropdown -->
-    <select
-      class="flex justify-items-start w-52 py-3 pl-5 dark:bg-dblue"
-      name=""
-      id=""
-      placeholder="Filter by Region"
-      v-model="area"
+    <div class="flex flex-col md:flex-row md:align-middle md:justify-between">
+      <input
+        class="mb-7 h-10 md:w-1/3 rounded-md py-7 md:my-6 dark:bg-dblue"
+        type="text"
+        placeholder="Search for a country..."
+        name=""
+        id=""
+        v-model="search"
+      />
+      <!-- Region dropdown -->
+      <select
+        class="flex justify-items-start w-52 py-3 pl-5 md:my-6 h-[49px] rounded-md md:py-0 dark:bg-dblue"
+        name=""
+        id=""
+        placeholder="Filter by Region"
+        v-model="area"
+      >
+        <option class="" value="">Filter by Region</option>
+        <option :value="region" v-for="region in regions">
+          {{ region }}
+        </option>
+      </select>
+    </div>
+    <!-- Countries list -->
+    <div
+      class="md:flex md:flex-row md:flex-wrap md:justify-between"
+      v-if="!results"
     >
-      <option class="" value="">Filter by Region</option>
-      <option :value="region" v-for="region in regions">
-        {{ region }}
-      </option>
-    </select>
-    <!-- <pre>{{ { area, regions, filteredCountries } }}</pre> -->
-    <!-- <pre>{{ results }}</pre> -->
-    <div v-if="!results">
       <NuxtLink
         v-for="country in countries"
-        class="flex flex-col bg-white border-solid border-2 border-vdblue mx-10 my-5 rounded-md overflow-hidden dark:bg-dblue"
+        class="flex flex-col justify-between bg-white border-solid border-2 border-vdblue mx-10 md:mx-0 my-5 rounded-md overflow-hidden md:w-[280px] dark:bg-dblue"
         :to="country.alpha3Code"
       >
-        <img :src="country.flags.svg" alt="" />
+        <img :src="country.flags.svg" class="h-[176px] object-cover" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col dark:bg-dblue">
           <h2 class="font-extrabold my-3">
             {{ country.name }}
