@@ -8,7 +8,10 @@ const toggleDark = useToggle(isDark);
   >
     <div class="bg-white flex justify-between px-3 py-5 md:px-9 dark:bg-dblue">
       <h1 class="font-extrabold">Where in the world?</h1>
-      <button @click="toggleDark()">Dark mode</button>
+      <div @click="toggleDark()" class="flex items-center gap-1">
+        <Icon name="iconoir:half-moon" size="16px"></Icon>
+        <button>Dark mode</button>
+      </div>
     </div>
     <div class="px-5 md:px-9">
       <NuxtPage></NuxtPage>
