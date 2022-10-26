@@ -11,7 +11,7 @@ const neighbors = computed(() => {
   let names = [];
   let codes = [];
   let combo = { names, codes };
-  if (country.value.borders.length > 0) {
+  if (country.value.borders != "") {
     for (var i = 0; i < all.value.length; i++) {
       for (var j = 0; j < country.value.borders.length; j++) {
         if (all.value[i].alpha3Code === country.value.borders[j]) {
