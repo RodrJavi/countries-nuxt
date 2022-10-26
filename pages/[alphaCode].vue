@@ -5,15 +5,7 @@ let name = useRoute().params.alphaCode;
 
 const { data: all } = await useFetch("https://restcountries.com/v2/all");
 
-const country = computed (() => {
-  let container;
-  for (var i = 0; i < all.value.length; i++){
-    if (all.value[i].alpha3Code === name) {
-      container = all.value[i];
-    }
-  }
-  return container;
-})
+const country = ref();
 
 const neighbors = computed(() => {
   let names = [];
@@ -21,6 +13,9 @@ const neighbors = computed(() => {
   let combo = { names, codes };
   if (country.value.hasOwnProperty('borders') == true){
     for (var i = 0; i < all.value.length; i++) {
+      if (all.value[i].alpha3Code === name) {
+      country = all.value[i];
+      }
       for (var j = 0; j < country.value.borders.length; j++) {
         if (all.value[i].alpha3Code === country.value.borders[j]) {
           names.push(all.value[i].name);
