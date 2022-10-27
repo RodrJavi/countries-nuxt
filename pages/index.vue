@@ -46,15 +46,15 @@ const numberFormatter = Intl.NumberFormat("en-US");
 <template>
   <div class="flex flex-col py-5">
     <!-- Input field -->
-    <div class="flex flex-col md:flex-row md:align-middle md:justify-between">
-      <div class="flex items-center md:w-1/3">
-        <Icon
-          name="iconoir:search"
-          size="24px"
-          class="h-[49px] mb-7 md:mb-0 rounded-l-md dark:bg-dblue"
-        ></Icon>
+    <div
+      class="flex flex-col gap-10 md:flex-row md:items-center md:justify-between"
+    >
+      <div
+        class="flex items-center bg-white rounded-md h-[49px] dark:bg-dblue px-6 md:w-1/3"
+      >
+        <Icon name="iconoir:search" size="24px" class="dark:bg-dblue"></Icon>
         <input
-          class="mb-7 h-10 md:w-full rounded-r-md py-7 md:my-6 dark:bg-dblue"
+          class="md:w-full bg-transparent"
           type="text"
           placeholder="Search for a country..."
           name=""
