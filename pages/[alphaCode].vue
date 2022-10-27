@@ -39,12 +39,12 @@ const numFor = Intl.NumberFormat("en-US");
     <div
       class="flex flex-col pt-10 pb-5 px-3 lg:p-0 lg:my-14 lg:w-full lg:justify-between"
     >
-      <div
-        class="flex inline-block shadow-lg items-center rounded max-w-fit justify-center bg-white gap-1 px-6 py-1 text-lg dark:bg-dblue"
+      <NuxtLink
+        class="flex inline-block shadow-lg items-center rounded max-w-fit justify-center bg-white gap-1 px-6 py-1 text-lg dark:bg-dblue" to="/"
       >
         <Icon name="iconoir:arrow-left" size="18px"> </Icon>
-        <NuxtLink to="/"> Back </NuxtLink>
-      </div>
+        <span> Back </span>
+      </NuxtLink>
 
       <div
         class="flex flex-col lg:flex-row lg:gap-20 lg:my-14 lg:justify-center"
