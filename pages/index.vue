@@ -1,8 +1,18 @@
 <script setup>
 const area = ref("");
 const search = ref("");
-const { data: countries } = await useFetch("https://restcountries.com/v2/all");
+const { data: countries, error } = await useFetch(
+  "https://restcountries.com/v3.1/all?fields=name,region,population,capital,flags,alpha3Code"
+);
+if (error.value) {
+  console.log("Error object:", error);
+  console.error(
+    "Failed to fetch countries:",
+    error.value.message || error.value
+  );
+}
 const regions = computed(() => {
+  if (!countries.value) return [];
   let names = [];
   for (let i = 0; i < countries.value.length; i++) {
     const region = countries.value[i].region;
@@ -22,11 +32,11 @@ const filteredCountries = computed(() => {
 const searched = computed(() => {
   if (area.value == "") {
     return countries.value.filter((country) =>
-      country.name.toLowerCase().includes(search.value.toLowerCase())
+      country.name.official.toLowerCase().includes(search.value.toLowerCase())
     );
   } else {
     return filteredCountries.value.filter((country) =>
-      country.name.toLowerCase().includes(search.value.toLowerCase())
+      country.name.official.toLowerCase().includes(search.value.toLowerCase())
     );
   }
 });
@@ -84,12 +94,12 @@ const numberFormatter = Intl.NumberFormat("en-US");
       <NuxtLink
         v-for="country in countries"
         class="flex flex-col justify-between bg-white mx-10 shadow-xl md:mx-0 my-5 rounded-md overflow-hidden md:w-[280px] dark:bg-dblue"
-        :to="country.alpha3Code"
+        :to="`/${country.alpha3Code}`"
       >
         <img :src="country.flags.svg" class="h-[176px] object-cover" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col dark:bg-dblue">
           <h2 class="font-extrabold my-3">
-            {{ country.name }}
+            {{ country.name.official }}
           </h2>
           <span class="">
             <span class="font-semibold">Population:</span>
@@ -100,7 +110,7 @@ const numberFormatter = Intl.NumberFormat("en-US");
           </span>
           <span>
             <span class="font-semibold">Capital:</span>
-            {{ country.capital }}
+            {{ country.capital[0] }}
           </span>
         </div>
       </NuxtLink>
@@ -113,7 +123,7 @@ const numberFormatter = Intl.NumberFormat("en-US");
       >
         <img :src="country.flags.svg" class="h-[176px] object-cover" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col dark:bg-dblue">
-          <h2 class="font-extrabold my-3">{{ country.name }}</h2>
+          <h2 class="font-extrabold my-3">{{ country.name.official }}</h2>
           <span class="">
             <span class="font-semibold">Population:</span>
             {{ numberFormatter.format(country.population) }}
@@ -123,7 +133,7 @@ const numberFormatter = Intl.NumberFormat("en-US");
           </span>
           <span>
             <span class="font-semibold">Capital:</span>
-            {{ country.capital }}
+            {{ country.capital[0] }}
           </span>
         </div>
       </NuxtLink>

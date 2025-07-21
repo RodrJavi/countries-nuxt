@@ -3,7 +3,9 @@ import { pushScopeId } from "vue";
 
 let name = useRoute().params.alphaCode;
 
-const { data: all } = await useFetch("https://restcountries.com/v2/all");
+const { data: all } = await useFetch(
+  "https://restcountries.com/v3.1/all?fields=alpha3Code,name,flags,population,region,subregion,capital,borders,languages,currencies,topLevelDomain"
+);
 
 const country = computed(() => {
   let container;
@@ -40,7 +42,8 @@ const numFor = Intl.NumberFormat("en-US");
       class="flex flex-col pt-10 pb-5 px-3 lg:p-0 lg:my-14 lg:w-full lg:justify-between"
     >
       <NuxtLink
-        class="flex inline-block shadow-lg items-center rounded max-w-fit justify-center bg-white gap-1 px-6 py-1 text-lg dark:bg-dblue" to="/"
+        class="flex inline-block shadow-lg items-center rounded max-w-fit justify-center bg-white gap-1 px-6 py-1 text-lg dark:bg-dblue"
+        to="/"
       >
         <Icon name="iconoir:arrow-left" size="18px"> </Icon>
         <span> Back </span>
@@ -55,7 +58,9 @@ const numFor = Intl.NumberFormat("en-US");
           class="mt-11 mb-9 max-w-[300px] lg:m-0 lg:max-w-none lg:w-[500px] lg:h-[325px]"
         />
         <div class="flex flex-col lg:justify-between lg:py-6">
-          <h1 class="my-4 font-extrabold text-lg">{{ country.name }}</h1>
+          <h1 class="my-4 font-extrabold text-lg">
+            {{ country.name.official }}
+          </h1>
           <div class="flex flex-col lg:flex-row gap-2 lg:gap-14 text-lg">
             <div class="flex flex-col">
               <span
