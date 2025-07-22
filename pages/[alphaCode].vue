@@ -1,6 +1,4 @@
 <script setup>
-import { pushScopeId } from "vue";
-
 let name = useRoute().params.alphaCode;
 
 const { data: all } = await useFetch(
@@ -12,21 +10,7 @@ const country = computed(() => {
   return all.value.find((c) => c.cca3 === name) || null;
 });
 
-const neighbors = computed(() => {
-  if (!country.value || !country.value.borders || !all.value)
-    return { names: [], codes: [] };
-  let names = [];
-  let codes = [];
-  for (let i = 0; i < all.value.length; i++) {
-    for (let j = 0; j < country.value.borders.length; j++) {
-      if (all.value[i].cca3 === country.value.borders[j]) {
-        names.push(all.value[i].name.official);
-        codes.push(all.value[i].cca3);
-      }
-    }
-  }
-  return { names, codes };
-});
+console.log("Country data:", country.value);
 
 const numFor = Intl.NumberFormat("en-US");
 </script>
@@ -64,31 +48,36 @@ const numFor = Intl.NumberFormat("en-US");
                 ><span class="font-semibold">Native Name: </span>
                 {{
                   country.hasOwnProperty("nativeName")
-                    ? country.name.nativeName
+                    ? country.name.nativeName.eng.official
                     : "No native Name"
                 }}</span
               >
-              <span v-if="country.hasOwnProperty('population') == true"
+
+              <span v-if="country.hasOwnProperty('population')"
                 ><span class="font-semibold">Population: </span
                 >{{ numFor.format(country.population) }}
               </span>
-              <span v-if="country.hasOwnProperty('region') == true"
+
+              <span v-if="country.hasOwnProperty('region')"
                 ><span class="font-semibold">Region: </span
                 >{{ country.region }}</span
               >
-              <span v-if="country.hasOwnProperty('subregion') == true"
+
+              <span v-if="country.hasOwnProperty('subregion')"
                 ><span class="font-semibold">Sub Region: </span
                 >{{ country.subregion }}</span
               >
+
               <span
                 ><span class="font-semibold">Capital: </span
                 >{{
                   country.hasOwnProperty("capital")
-                    ? country.capital
+                    ? country.capital[0]
                     : `${country.name.official} has no capital!`
                 }}</span
               >
             </div>
+
             <br />
             <div class="flex flex-col">
               <span
@@ -99,11 +88,11 @@ const numFor = Intl.NumberFormat("en-US");
                     : `${country.name.official} has no top level domain!`
                 }}</span
               >
-              <span
-                ><span class="font-semibold">Currencies: </span
+              <span>
+                <span class="font-semibold">Currencies: </span
                 >{{
                   country.hasOwnProperty("currencies")
-                    ? country.currencies[0].name
+                    ? Object.keys(country.currencies).join(", ")
                     : `${country.name.official} has no currency!`
                 }}</span
               >
@@ -115,23 +104,23 @@ const numFor = Intl.NumberFormat("en-US");
             </div>
           </div>
           <br />
-          <div class="flex flex-row flex-wrap gap-2">
+          <!-- <div class="flex flex-row flex-wrap gap-2">
             <span class="font-semibold">Border Countries:</span>
             <div
               v-if="country.hasOwnProperty('borders') == true"
               class="flex flex-row flex-wrap gap-2"
             >
               <div
-                v-if="neighbors.names.length > 0"
+                v-if="country.borders.length > 0"
                 class="flex flex-row flex-wrap gap-2"
               >
                 <NuxtLink
-                  v-for="(neighbor, index) in neighbors.names"
+                  v-for="border in country.borders"
                   :key="index"
                   class="shadow-lg rounded bg-white px-6 py-1 dark:bg-dblue"
-                  :to="`/${neighbors.codes[index]}`"
+                  :to="`/${border}`"
                 >
-                  {{ neighbor }}
+                  {{ border }}
                 </NuxtLink>
               </div>
               <div v-else>
@@ -147,7 +136,7 @@ const numFor = Intl.NumberFormat("en-US");
                 `${country.name.official} has no bordering neighbors!`
               }}</span>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
