@@ -87,10 +87,7 @@ const numberFormatter = Intl.NumberFormat("en-US");
       </select>
     </div>
     <!-- Countries list -->
-    <div
-      class="md:flex md:flex-row md:flex-wrap md:justify-between"
-      v-if="!results"
-    >
+    <div class="md:flex md:flex-row md:flex-wrap gap-20" v-if="!results">
       <NuxtLink
         v-for="country in countries"
         class="flex flex-col justify-between bg-white mx-10 shadow-xl md:mx-0 my-5 rounded-md overflow-hidden md:w-[280px] dark:bg-dblue"
