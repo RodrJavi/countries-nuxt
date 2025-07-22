@@ -10,8 +10,6 @@ const country = computed(() => {
   return all.value.find((c) => c.cca3 === name) || null;
 });
 
-console.log("Country data:", country.value);
-
 const numFor = Intl.NumberFormat("en-US");
 </script>
 <template>
@@ -117,7 +115,7 @@ const numFor = Intl.NumberFormat("en-US");
               >
                 <NuxtLink
                   v-for="border in country.borders"
-                  :key="index"
+                  :key="border"
                   class="shadow-lg rounded bg-white px-6 py-1 dark:bg-dblue"
                   :to="`/${border}`"
                 >
