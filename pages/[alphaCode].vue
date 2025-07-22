@@ -43,7 +43,7 @@ const numFor = Intl.NumberFormat("en-US");
           <span v-else>No country data available</span>
 
           <div class="flex flex-col lg:flex-row gap-2 lg:gap-14 text-lg">
-            <div class="flex flex-col">
+            <div class="flex flex-col gap-2">
               <span
                 ><span class="font-semibold">Native Name: </span>
                 {{
@@ -79,7 +79,8 @@ const numFor = Intl.NumberFormat("en-US");
             </div>
 
             <br />
-            <div class="flex flex-col">
+
+            <div class="flex flex-col gap-2">
               <span
                 ><span class="font-semibold">Top Level Domain: </span
                 >{{
@@ -103,8 +104,8 @@ const numFor = Intl.NumberFormat("en-US");
               <span v-else>No languages available</span>
             </div>
           </div>
-          <br />
-          <!-- <div class="flex flex-row flex-wrap gap-2">
+
+          <div class="flex flex-row flex-wrap gap-2 mt-2">
             <span class="font-semibold">Border Countries:</span>
             <div
               v-if="country.hasOwnProperty('borders') == true"
@@ -136,7 +137,7 @@ const numFor = Intl.NumberFormat("en-US");
                 `${country.name.official} has no bordering neighbors!`
               }}</span>
             </div>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
