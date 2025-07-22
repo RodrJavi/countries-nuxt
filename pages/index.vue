@@ -2,7 +2,7 @@
 const area = ref("");
 const search = ref("");
 const { data: countries, error } = await useFetch(
-  "https://restcountries.com/v3.1/all?fields=name,region,population,capital,flags,alpha3Code"
+  "https://restcountries.com/v3.1/all?fields=name,region,population,capital,flags,alpha3Code,cca3"
 );
 if (error.value) {
   console.log("Error object:", error);
@@ -94,7 +94,7 @@ const numberFormatter = Intl.NumberFormat("en-US");
       <NuxtLink
         v-for="country in countries"
         class="flex flex-col justify-between bg-white mx-10 shadow-xl md:mx-0 my-5 rounded-md overflow-hidden md:w-[280px] dark:bg-dblue"
-        :to="`/${country.alpha3Code}`"
+        :to="`/${country.cca3}`"
       >
         <img :src="country.flags.svg" class="h-[176px] object-cover" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col dark:bg-dblue">
@@ -119,7 +119,7 @@ const numberFormatter = Intl.NumberFormat("en-US");
       <NuxtLink
         v-for="country in results.value"
         class="flex flex-col justify-between bg-white mx-10 shadow-xl md:mx-0 my-5 rounded-md overflow-hidden md:w-[280px] dark:bg-dblue"
-        :to="country.alpha3Code"
+        :to="`/${country.cca3}`"
       >
         <img :src="country.flags.svg" class="h-[176px] object-cover" alt="" />
         <div class="px-5 pb-10 pt-3 flex flex-col dark:bg-dblue">

@@ -4,34 +4,28 @@ import { pushScopeId } from "vue";
 let name = useRoute().params.alphaCode;
 
 const { data: all } = await useFetch(
-  "https://restcountries.com/v3.1/all?fields=alpha3Code,name,flags,population,region,subregion,capital,borders,languages,currencies,topLevelDomain"
+  "https://restcountries.com/v3.1/all?fields=cca3,name,flags,population,region,subregion,capital,borders,languages,currencies"
 );
 
 const country = computed(() => {
-  let container;
-  for (let i = 0; i < all.value.length; i++) {
-    if (all.value[i].alpha3Code === name) {
-      container = all.value[i];
-    }
-  }
-  return container;
+  if (!all.value) return null;
+  return all.value.find((c) => c.cca3 === name) || null;
 });
 
 const neighbors = computed(() => {
+  if (!country.value || !country.value.borders || !all.value)
+    return { names: [], codes: [] };
   let names = [];
   let codes = [];
-  let combo = { names, codes };
-  if (country.value.hasOwnProperty("borders")) {
-    for (let i = 0; i < all.value.length; i++) {
-      for (let j = 0; j < country.value.borders.length; j++) {
-        if (all.value[i].alpha3Code === country.value.borders[j]) {
-          names.push(all.value[i].name);
-          codes.push(all.value[i].alpha3Code);
-        }
+  for (let i = 0; i < all.value.length; i++) {
+    for (let j = 0; j < country.value.borders.length; j++) {
+      if (all.value[i].cca3 === country.value.borders[j]) {
+        names.push(all.value[i].name.official);
+        codes.push(all.value[i].cca3);
       }
     }
-    return combo;
   }
+  return { names, codes };
 });
 
 const numFor = Intl.NumberFormat("en-US");
@@ -53,21 +47,24 @@ const numFor = Intl.NumberFormat("en-US");
         class="flex flex-col lg:flex-row lg:gap-20 lg:my-14 lg:justify-center"
       >
         <img
+          v-if="country && country.flags"
           :src="country.flags.svg"
           alt=""
           class="mt-11 mb-9 max-w-[300px] lg:m-0 lg:max-w-none lg:w-[500px] lg:h-[325px]"
         />
         <div class="flex flex-col lg:justify-between lg:py-6">
-          <h1 class="my-4 font-extrabold text-lg">
+          <h1 v-if="country" class="my-4 font-extrabold text-lg">
             {{ country.name.official }}
           </h1>
+          <span v-else>No country data available</span>
+
           <div class="flex flex-col lg:flex-row gap-2 lg:gap-14 text-lg">
             <div class="flex flex-col">
               <span
                 ><span class="font-semibold">Native Name: </span>
                 {{
                   country.hasOwnProperty("nativeName")
-                    ? country.nativeName
+                    ? country.name.nativeName
                     : "No native Name"
                 }}</span
               >
@@ -88,7 +85,7 @@ const numFor = Intl.NumberFormat("en-US");
                 >{{
                   country.hasOwnProperty("capital")
                     ? country.capital
-                    : `${country.name} has no capital!`
+                    : `${country.name.official} has no capital!`
                 }}</span
               >
             </div>
@@ -99,7 +96,7 @@ const numFor = Intl.NumberFormat("en-US");
                 >{{
                   country.hasOwnProperty("topLevelDomain")
                     ? country.topLevelDomain[0]
-                    : `${country.name} has no top level domain!`
+                    : `${country.name.official} has no top level domain!`
                 }}</span
               >
               <span
@@ -107,13 +104,14 @@ const numFor = Intl.NumberFormat("en-US");
                 >{{
                   country.hasOwnProperty("currencies")
                     ? country.currencies[0].name
-                    : `${country.name} has no currency!`
+                    : `${country.name.official} has no currency!`
                 }}</span
               >
-              <span v-if="country.hasOwnProperty('languages') == true">
+              <span v-if="country?.languages">
                 <span class="font-semibold">Languages: </span>
-                {{ country.languages.map((l) => l.name).join(", ") }}
+                {{ Object.values(country.languages).join(", ") }}
               </span>
+              <span v-else>No languages available</span>
             </div>
           </div>
           <br />
@@ -123,16 +121,31 @@ const numFor = Intl.NumberFormat("en-US");
               v-if="country.hasOwnProperty('borders') == true"
               class="flex flex-row flex-wrap gap-2"
             >
-              <NuxtLink
-                v-for="(neighbor, index) in neighbors.names"
-                class="shadow-lg rounded bg-white px-6 py-1 dark:bg-dblue"
-                :to="neighbors.codes[index]"
+              <div
+                v-if="neighbors.names.length > 0"
+                class="flex flex-row flex-wrap gap-2"
               >
-                {{ neighbor }}
-              </NuxtLink>
+                <NuxtLink
+                  v-for="(neighbor, index) in neighbors.names"
+                  :key="index"
+                  class="shadow-lg rounded bg-white px-6 py-1 dark:bg-dblue"
+                  :to="`/${neighbors.codes[index]}`"
+                >
+                  {{ neighbor }}
+                </NuxtLink>
+              </div>
+              <div v-else>
+                <span>{{
+                  `${
+                    country?.name?.official || "This country"
+                  } has no bordering neighbors!`
+                }}</span>
+              </div>
             </div>
             <div v-else>
-              <span>{{ `${country.name} has no bordering neighbors!` }}</span>
+              <span>{{
+                `${country.name.official} has no bordering neighbors!`
+              }}</span>
             </div>
           </div>
         </div>
